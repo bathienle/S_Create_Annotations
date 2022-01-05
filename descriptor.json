@@ -1,0 +1,67 @@
+{
+  "name": "CreateAnnotations",
+  "description": "Create annotations from a given threshold on a heatmap.",
+  "schema-version": "cytomine-0.1",
+  "inputs": [
+    {
+      "id": "cytomine_host",
+      "name": "Cytomine host",
+      "set-by-server": true,
+      "optional": false,
+      "type": "String"
+    },
+    {
+      "id": "cytomine_public_key",
+      "name": "Cytomine public key",
+      "set-by-server": true,
+      "optional": false,
+      "type": "String"
+    },
+    {
+      "id": "cytomine_private_key",
+      "name": "Cytomine private key",
+      "set-by-server": true,
+      "optional": false,
+      "type": "String"
+    },
+    {
+      "id": "cytomine_id_project",
+      "name": "Cytomine project ID",
+      "set-by-server": true,
+      "optional": false,
+      "type": "Number"
+    },
+    {
+      "id": "cytomine_id_software",
+      "name": "Cytomine software ID",
+      "set-by-server": true,
+      "optional": false,
+      "type": "Number"
+    },
+    {
+      "id": "cytomine_term_ids",
+      "name": "Cytomine term IDs",
+      "optional": true,
+      "type": "List"
+    },
+    {
+      "id": "image_id",
+      "name": "The Cytomine image ID",
+      "optional": false,
+      "type": "String"
+    },
+    {
+      "id": "threshold",
+      "name": "Threshold",
+      "optional": false,
+      "type": "Number"
+    },
+    {
+      "id": "min_area",
+      "name": "Minimum valid area",
+      "optional": true,
+      "default-value": 1000,
+      "type": "Number"
+    }
+  ]
+}

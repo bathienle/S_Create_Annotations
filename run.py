@@ -15,12 +15,10 @@
 # * limitations under the License.
 
 import numpy as np
-import sys
-from argparse import ArgumentParser
 from shapely.affinity import affine_transform
 from shapely.geometry import Polygon
 
-from cytomine import Cytomine
+from cytomine import CytomineJob
 from cytomine.models import Annotation, AnnotationCollection, ImageInstance
 
 from sldc import Logger, StandardOutputLogger, Segmenter, SSLWorkflowBuilder
@@ -53,58 +51,18 @@ def check_area(polygon: Polygon, min_area: int) -> bool:
     return min_area < polygon.area
 
 
-if __name__ == '__main__':
-    parser = ArgumentParser()
-
-    parser.add_argument(
-        '--host',
-        help="The Cytomine host"
-    )
-    parser.add_argument(
-        '--public_key',
-        help="The Cytomine public key"
-    )
-    parser.add_argument(
-        '--private_key',
-        help="The Cytomine private key"
-    )
-    parser.add_argument(
-        '--project_id',
-        help="The project from which we want the images"
-    )
-    parser.add_argument(
-        '--image_id',
-        help="The image from which to generate the annotations"
-    )
-    parser.add_argument(
-        '--term_id',
-        help="The term ID to associate to the annotations"
-    )
-    parser.add_argument(
-        '--threshold',
-        type=float,
-        default=0.5,
-        help="The threshold for the segmentation"
-    )
-    parser.add_argument(
-        '--min_area',
-        type=int,
-        default=1000,
-        help="The minimum area for an annotation"
-    )
-
-    args, _ = parser.parse_known_args(sys.argv[1:])
+def main(argv):
     working_path = 'tiles/'
 
-    with Cytomine(args.host, args.public_key, args.private_key) as cytomine:
-        image = ExtendedCytomineSlide(ImageInstance().fetch(args.image_id))
+    with CytomineJob.from_cli(argv) as cj:
+        image = ExtendedCytomineSlide(ImageInstance().fetch(cj.parameters.image_id))
 
         # Build the workflow
         builder = SSLWorkflowBuilder()
         builder.set_tile_size(512, 512)
         builder.set_tile_builder(CytomineTileBuilder(working_path))
         builder.set_logger(StandardOutputLogger(level=Logger.INFO))
-        builder.set_segmenter(ThresholdSegmenter(args.threshold))
+        builder.set_segmenter(ThresholdSegmenter(cj.parameters.threshold))
 
         # Get the workflow
         workflow = builder.get()
@@ -113,7 +71,7 @@ if __name__ == '__main__':
         results = workflow.process(image)
         annotations = AnnotationCollection()
         for result in results:
-            if check_area(result.polygon, min_area=args.min_area):
+            if check_area(result.polygon, min_area=cj.parameters.min_area):
                 annotation = affine_transform(
                     result.polygon,
                     [1, 0, 0, -1, 0, image.height]
@@ -121,9 +79,15 @@ if __name__ == '__main__':
 
                 annotations.append(Annotation(
                     location=annotation.wkt,
-                    id_image=args.image_id,
-                    id_project=args.project_id,
-                    term=[args.term_id]
+                    id_image=cj.parameters.image_id,
+                    id_project=cj.parameters.cytomine_id_project,
+                    term=[cj.parameters.cytomine_term_ids]
                 ))
 
         annotations.save()
+
+
+if __name__ == '__main__':
+    import sys
+
+    main(sys.argv[1:])
