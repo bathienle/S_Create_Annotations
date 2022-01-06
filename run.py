@@ -55,21 +55,26 @@ def main(argv):
     working_path = 'tiles/'
 
     with CytomineJob.from_cli(argv) as cj:
+        cj.job.update(progress=0, statusComment="Fetch the image from Cytomine")
         image = ExtendedCytomineSlide(ImageInstance().fetch(cj.parameters.image_id))
 
         # Build the workflow
+        cj.job.update(progress=20, statusComment="Build the workflow")
         builder = SSLWorkflowBuilder()
         builder.set_tile_size(512, 512)
         builder.set_tile_builder(CytomineTileBuilder(working_path))
-        builder.set_logger(StandardOutputLogger(level=Logger.INFO))
+        builder.set_logger(StandardOutputLogger(level=Logger.WARNING))
         builder.set_segmenter(ThresholdSegmenter(cj.parameters.threshold))
 
         # Get the workflow
         workflow = builder.get()
 
         # Process the image
+        cj.job.update(progress=40, statusComment="Apply the threshold")
         results = workflow.process(image)
         annotations = AnnotationCollection()
+
+        cj.job.update(progress=80, statusComment="Save the annotations")
         for result in results:
             if check_area(result.polygon, min_area=cj.parameters.min_area):
                 annotation = affine_transform(
@@ -81,10 +86,12 @@ def main(argv):
                     location=annotation.wkt,
                     id_image=cj.parameters.image_id,
                     id_project=cj.parameters.cytomine_id_project,
-                    term=cj.parameters.cytomine_term_ids
+                    term=list(map(int, cj.parameters.cytomine_term_ids.split(',')))
                 ))
 
         annotations.save()
+
+        cj.job.update(progress=100, statusComment="Job terminated")
 
 
 if __name__ == '__main__':
