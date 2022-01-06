@@ -61,6 +61,7 @@ def main(argv):
         # Build the workflow
         cj.job.update(progress=20, statusComment="Build the workflow")
         builder = SSLWorkflowBuilder()
+        builder.set_background_class(0)
         builder.set_tile_size(512, 512)
         builder.set_tile_builder(CytomineTileBuilder(working_path))
         builder.set_logger(StandardOutputLogger(level=Logger.WARNING))
