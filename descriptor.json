@@ -68,7 +68,10 @@
       "id": "image_id",
       "name": "The Cytomine image ID",
       "optional": false,
-      "type": "String",
+      "type": "Domain",
+      "uri": "/api/project/$currentProject$/imageinstance.json",
+      "uri-print-attribute": "instanceFilename",
+      "uri-sort-attribute": "instanceFilename",
       "value-key": "@ID",
       "command-line-flag": "--@id"
     },
