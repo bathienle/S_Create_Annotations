@@ -1,5 +1,5 @@
 {
-  "name": "CreateAnnotations",
+  "name": "Create_Annotations",
   "container-image": {
     "image": "bathienle/s_create_annotations",
     "type": "singularity"
