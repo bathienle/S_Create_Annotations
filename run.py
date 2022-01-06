@@ -81,7 +81,7 @@ def main(argv):
                     location=annotation.wkt,
                     id_image=cj.parameters.image_id,
                     id_project=cj.parameters.cytomine_id_project,
-                    term=[cj.parameters.cytomine_term_ids]
+                    term=cj.parameters.cytomine_term_ids
                 ))
 
         annotations.save()

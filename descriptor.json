@@ -1,67 +1,93 @@
 {
   "name": "CreateAnnotations",
+  "container-image": {
+    "image": "bathienle/s_create_annotations",
+    "type": "singularity"
+  },
   "description": "Create annotations from a given threshold on a heatmap.",
   "schema-version": "cytomine-0.1",
+  "command-line": "python run.py CYTOMINE_HOST CYTOMINE_PUBLIC_KEY CYTOMINE_PRIVATE_KEY CYTOMINE_ID_PROJECT CYTOMINE_ID_SOFTWARE CYTOMINE_TERM_IDS IMAGE_ID THRESHOLD MIN_AREA",
   "inputs": [
     {
       "id": "cytomine_host",
       "name": "Cytomine host",
       "set-by-server": true,
       "optional": false,
-      "type": "String"
+      "type": "String",
+      "value-key": "@ID",
+      "command-line-flag": "--@id"
     },
     {
       "id": "cytomine_public_key",
       "name": "Cytomine public key",
       "set-by-server": true,
       "optional": false,
-      "type": "String"
+      "type": "String",
+      "value-key": "@ID",
+      "command-line-flag": "--@id"
     },
     {
       "id": "cytomine_private_key",
       "name": "Cytomine private key",
       "set-by-server": true,
       "optional": false,
-      "type": "String"
+      "type": "String",
+      "value-key": "@ID",
+      "command-line-flag": "--@id"
     },
     {
       "id": "cytomine_id_project",
       "name": "Cytomine project ID",
       "set-by-server": true,
       "optional": false,
-      "type": "Number"
+      "type": "Number",
+      "value-key": "@ID",
+      "command-line-flag": "--@id"
     },
     {
       "id": "cytomine_id_software",
       "name": "Cytomine software ID",
       "set-by-server": true,
       "optional": false,
-      "type": "Number"
+      "type": "Number",
+      "value-key": "@ID",
+      "command-line-flag": "--@id"
     },
     {
       "id": "cytomine_term_ids",
-      "name": "Cytomine term IDs",
-      "optional": true,
-      "type": "List"
+      "name": "Cytomine terms that will be associated to the annotations",
+      "optional": false,
+      "type": "ListDomain",
+      "uri": "/api/ontology/$currentOntology$/term.json",
+      "uri-print-attribute": "name",
+      "uri-sort-attribute": "name",
+      "value-key": "@ID",
+      "command-line-flag": "--@id"
     },
     {
       "id": "image_id",
       "name": "The Cytomine image ID",
       "optional": false,
-      "type": "String"
+      "type": "String",
+      "value-key": "@ID",
+      "command-line-flag": "--@id"
     },
     {
       "id": "threshold",
       "name": "Threshold",
       "optional": false,
-      "type": "Number"
+      "type": "Number",
+      "value-key": "@ID",
+      "command-line-flag": "--@id"
     },
     {
       "id": "min_area",
       "name": "Minimum valid area",
       "optional": true,
       "default-value": 1000,
-      "type": "Number"
+      "type": "Number",
+      "value-key": "@ID",
+      "command-line-flag": "--@id"
     }
   ]
 }
