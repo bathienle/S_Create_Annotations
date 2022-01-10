@@ -132,7 +132,7 @@ def main(argv):
 
     with CytomineJob.from_cli(argv) as cj:
         cj.job.update(progress=0, statusComment="Fetch the image from Cytomine")
-        image = ExtendedCytomineSlide(ImageInstance().fetch(cj.parameters.image_id))
+        heatmap = ExtendedCytomineSlide(ImageInstance().fetch(cj.parameters.heatmap_id))
 
         # Build the workflow
         cj.job.update(progress=20, statusComment="Build the workflow")
@@ -150,7 +150,7 @@ def main(argv):
 
         # Process the image
         cj.job.update(progress=40, statusComment="Apply the threshold")
-        results = workflow.process(image)
+        results = workflow.process(heatmap)
         annotations = AnnotationCollection()
 
         cj.job.update(progress=80, statusComment="Save the annotations")
@@ -158,7 +158,7 @@ def main(argv):
             if check_area(result.polygon, min_area=cj.parameters.min_area):
                 annotation = affine_transform(
                     result.polygon,
-                    [1, 0, 0, -1, 0, image.height]
+                    [1, 0, 0, -1, 0, heatmap.height]
                 )
 
                 annotations.append(Annotation(

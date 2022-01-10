@@ -6,7 +6,7 @@
   },
   "description": "Create annotations from a given threshold on a heatmap.",
   "schema-version": "cytomine-0.1",
-  "command-line": "python run.py CYTOMINE_HOST CYTOMINE_PUBLIC_KEY CYTOMINE_PRIVATE_KEY CYTOMINE_ID_PROJECT CYTOMINE_ID_SOFTWARE CYTOMINE_TERM_IDS IMAGE_ID THRESHOLD MIN_AREA",
+  "command-line": "python run.py CYTOMINE_HOST CYTOMINE_PUBLIC_KEY CYTOMINE_PRIVATE_KEY CYTOMINE_ID_PROJECT CYTOMINE_ID_SOFTWARE CYTOMINE_TERM_IDS IMAGE_ID HEATMAP_ID THRESHOLD MIN_AREA",
   "inputs": [
     {
       "id": "cytomine_host",
@@ -67,6 +67,17 @@
     {
       "id": "image_id",
       "name": "The Cytomine image ID",
+      "optional": false,
+      "type": "Domain",
+      "uri": "/api/project/$currentProject$/imageinstance.json",
+      "uri-print-attribute": "instanceFilename",
+      "uri-sort-attribute": "instanceFilename",
+      "value-key": "@ID",
+      "command-line-flag": "--@id"
+    },
+    {
+      "id": "heatmap_id",
+      "name": "The heatmap associated to this image",
       "optional": false,
       "type": "Domain",
       "uri": "/api/project/$currentProject$/imageinstance.json",
