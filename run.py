@@ -132,7 +132,9 @@ def main(argv):
 
     with CytomineJob.from_cli(argv) as cj:
         cj.job.update(progress=0, statusComment="Fetch the image from Cytomine")
-        heatmap = ExtendedCytomineSlide(ImageInstance().fetch(cj.parameters.heatmap_id))
+        heatmap = ExtendedCytomineSlide(
+            ImageInstance().fetch(cj.parameters.heatmap_id)
+        ).window((36000, 31680), 15000, 15000)
 
         # Build the workflow
         cj.job.update(progress=20, statusComment="Build the workflow")
@@ -142,7 +144,7 @@ def main(argv):
         builder.set_tile_builder(
             CytomineTileBuilder(working_path, tile_class=CytominePIMSTile)
         )
-        builder.set_logger(StandardOutputLogger(level=Logger.WARNING))
+        builder.set_logger(StandardOutputLogger(level=Logger.INFO))
         builder.set_segmenter(ThresholdSegmenter(cj.parameters.threshold))
 
         # Get the workflow
