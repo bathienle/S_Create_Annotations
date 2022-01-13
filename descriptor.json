@@ -6,7 +6,7 @@
   },
   "description": "Create annotations from a given threshold on a heatmap.",
   "schema-version": "cytomine-0.1",
-  "command-line": "python run.py CYTOMINE_HOST CYTOMINE_PUBLIC_KEY CYTOMINE_PRIVATE_KEY CYTOMINE_ID_PROJECT CYTOMINE_ID_SOFTWARE CYTOMINE_TERM_IDS IMAGE_ID HEATMAP_ID THRESHOLD MIN_AREA",
+  "command-line": "python run.py CYTOMINE_HOST CYTOMINE_PUBLIC_KEY CYTOMINE_PRIVATE_KEY CYTOMINE_ID_PROJECT CYTOMINE_ID_SOFTWARE CYTOMINE_TERM_IDS IMAGE_ID HEATMAP_ID THRESHOLD MIN_AREA WINDOW_SIZE",
   "inputs": [
     {
       "id": "cytomine_host",
@@ -90,6 +90,15 @@
       "id": "threshold",
       "name": "Threshold",
       "optional": false,
+      "type": "Number",
+      "value-key": "@ID",
+      "command-line-flag": "--@id"
+    },
+    {
+      "id": "window_size",
+      "name": "Window size",
+      "optional": true,
+      "default-value": 5000,
       "type": "Number",
       "value-key": "@ID",
       "command-line-flag": "--@id"

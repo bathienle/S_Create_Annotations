@@ -134,7 +134,7 @@ def main(argv):
         cj.job.update(progress=0, statusComment="Fetch the image from Cytomine")
         heatmap = ExtendedCytomineSlide(
             ImageInstance().fetch(cj.parameters.heatmap_id)
-        ).window((36000, 31680), 15000, 15000)
+        ).window((36000, 31680), cj.parameters.window_size, cj.parameters.window_size)
 
         # Build the workflow
         cj.job.update(progress=20, statusComment="Build the workflow")
